@@ -2,6 +2,9 @@
 
 This plugin provides a node-executor and file-copier using Puppet Bolt. Use this plugin if you want to access remote servers using [Puppet Bolt](https://puppet.com/products/puppet-bolt) command.
 
+## Requierments 
+* Puppet Bolt need to be installed on rundeck server
+* Python need to be installed on rundeck server
 
 ## Plugin Configuration Properties
 
