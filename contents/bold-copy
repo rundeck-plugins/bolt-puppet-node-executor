@@ -1,0 +1,44 @@
+#!/usr/bin/env python
+# bolt-copy
+import argparse
+import os
+import subprocess
+import sys
+
+
+parser = argparse.ArgumentParser(description='Copy file using Bolt command.')
+parser.add_argument('username', help='the username')
+parser.add_argument('hostname', help='the hostname')
+parser.add_argument('source', help='Source File')
+parser.add_argument('destination', help='Destination File')
+args = parser.parse_args()
+
+#it is necesarry to avoid the debug error
+print args.destination
+
+protocol = os.getenv("RD_CONFIG_PROTOCOL") 
+
+host=protocol +"://"+args.hostname
+
+COMMAND = ["/usr/local/bin/bolt", "file","upload", "-n", host ,args.source,args.destination,"-u",args.username]
+
+
+if "RD_CONFIG_PASSWORD_STORAGE_PATH" in os.environ:
+    COMMAND.append("-p")
+    COMMAND.append(os.getenv("RD_CONFIG_PASSWORD_STORAGE_PATH"))
+
+if protocol == "ssh":
+    COMMAND.append("--tty")
+
+if os.getenv("RD_JOB_LOGLEVEL") == "DEBUG":
+    COMMAND.append("--debug")
+
+
+
+try:
+    print subprocess.check_output(COMMAND)
+except OSError as e:
+    print >>sys.stderr, "Command error:", e
+    sys.exit(1)
+
+# Done

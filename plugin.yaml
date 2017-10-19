@@ -1,0 +1,75 @@
+name: Bolt node execution services
+rundeckPluginVersion: 1.2
+author: Luis Toledo
+date: 10/17/2017
+version: 1.0
+providers:
+    - name: bolt-executor
+      service: NodeExecutor
+      title: 'Puppet Bolt / Node Executor'
+      description: Executes a command on a remote node using Bolt
+      plugin-type: script
+      script-interpreter: python -u
+      script-file: bolt-executor
+      script-args: ${node.username} ${node.hostname}
+      config:
+        - name: dry_run
+          title: 'Dry run?'
+          type: Boolean
+          required: false
+          description: 'Just echo what would be done'
+        - type: Select
+          name: protocol
+          title: Protocol
+          description: Protocol to connect to remote nodes ( winrm for windows nodes or ssh for linux). A node attribute named bolt-protocol will override this value.
+          default: ssh
+          values:
+          - ssh
+          - winrm
+          scope: Instance
+          renderingOptions:
+             instance-scope-node-attribute: "bolt-protocol"
+        - name: password_storage_path
+          title: Bolt Password Storage Path
+          type: String
+          required: false
+          description: "Optional storage password path. Can contain property references to node attributes. A node attribute named bolt-password-storage-path will override this value."
+          scope: Instance
+          renderingOptions:
+            selectionAccessor: "STORAGE_PATH"
+            valueConversion: "STORAGE_PATH_AUTOMATIC_READ"
+            storage-path-root: "keys"
+            storage-file-meta-filter: "Rundeck-data-type=password"
+            instance-scope-node-attribute: "bolt-password-storage-path"
+    - name: bolt-file-copier
+      service: FileCopier
+      title: 'Puppet Bolt / File Copier'
+      description: Copies file to the node via bold.
+      plugin-type: script
+      script-interpreter: python -u
+      script-file: bold-copy
+      script-args: ${node.username} ${node.hostname} ${file-copy.file} ${file-copy.destination}
+      config:
+        - type: Select
+          name: protocol
+          title: Protocol
+          description: Protocol to connect to remote nodes ( winrm for windows nodes or ssh for linux). A node attribute named bolt-protocol will override this value.
+          default: ssh
+          values:
+          - ssh
+          - winrm
+          scope: Instance
+          renderingOptions:
+             instance-scope-node-attribute: "bolt-protocol"
+        - name: password_storage_path
+          title: Bolt Password Storage Path
+          type: String
+          required: false
+          description: "Optional storage password path. Can contain property references to node attributes. A node attribute named bolt-password-storage-path will override this value."
+          scope: Instance
+          renderingOptions:
+            selectionAccessor: "STORAGE_PATH"
+            valueConversion: "STORAGE_PATH_AUTOMATIC_READ"
+            storage-path-root: "keys"
+            storage-file-meta-filter: "Rundeck-data-type=password"
+            instance-scope-node-attribute: "bolt-password-storage-path"

@@ -1,41 +1,49 @@
-# OpenSSH Node Execution Plugins
+# Puppet Bolt Node Execution / File Copier Plugins
 
-This plugin provides a node-executor and file-copier using OpenSSH. Use this plugin if you want to access remote servers using ssh/scp commands (as an alternative of the default SSH plugin of rundeck, which is a Java Plugin based on JSCH library).
+This plugin provides a node-executor and file-copier using Puppet Bolt. Use this plugin if you want to access remote servers using [Puppet Bolt](https://puppet.com/products/puppet-bolt) command.
+
+
+## Plugin Configuration Properties
+
+* Prototol: Set protocol of the remote node. The options are SSH or WINRM (windows hosts) 
+* Password Authentication (using key storage).
+* Dry run? If set true, just print the command invocation that would be used but do not execute the command. This is useful to preview.
 
 ## Dry run mode
 
 You can configure the plugin to just print the invocation string to the console. This can be useful when defining the configuration properties.
 
 
-## Plugin Configuration Properties
-
-* Private Key or Password Authentication.
-* Password Authentication needs `sshpass` installed on the rundeck server.
-* Both password and private key are taken from the key storage.
-* It accepts custom SSH settings 
-* Attributes can be defined at project or node level (eg: ssh-authentication, ssh-password-storage-path, ssh-options, ssh-key-storage-path)
-* Dry run? If set true, just print the command invocation that would be used but do not execute the command. This is useful to preview.
-
 ## Configuration
 
-The plugin can be configured as a default node executor and file copier for a Project. Use the Simple Conguration tab to see the configuration properties. 
+The plugin can be configured as a default node executor and file copier on a Project. Use the Simple Conguration tab to see the configuration properties. 
 
-Also you can define the configuration at node level, setting the node-executor and file-copier attributes.
+Also you can define the configuration at node level, setting the node-executor and file-copier attributes, for example:
 
 ```
-<node name="RemoteNode" 
-	   description="Remote SSH Node" 
-	   tags="vagrant" 
+<node name="LinuxNode" 
+	   description="Remote Linux SSH Node" 
+	   tags="Linux" 
+	   node-executor="bolt-executor"
+	   file-copier="bolt-file-copier"
 	   hostname="192.168.0.1" 
-	   osArch="Linux" 
-	   osFamily="x86_64" 
-	   osName="Linux" 
-	   osVersion="10.12.6" 
-	   username="vagrant" 
-	   node-executor="ssh-exec" 
-	   file-copier="ssh-copier" 
-	   ssh-authentication="password"  
-	   ssh-password-storage-path ="keys/node/user.password" 
-	   ssh-options="-o ConnectTimeout=5000"/>
+	   osArch="x86_64" 
+	   osFamily="Linux" 
+	   osName="Centos 7" 
+	   username="rundeckuser" 
+	   bolt-protocol="ssh"
+	   bolt-password-storage-path ="keys/node/linux.password" />
+
+<node name="Windows" 
+	   description="Remote Windows Node" 
+	   tags="Windows" 
+	   node-executor="bolt-executor"
+	   file-copier="bolt-file-copier"
+	   hostname="192.168.0.2" 
+	   osArch="x86_64" 
+	   osFamily="windows" 
+	   osName="Microsoft Windows Server 2012 R2 Standard"
+	   username="rundeckuser" 
+	   bolt-protocol="winrm"
+	   bolt-password-storage-path ="keys/node/windows.password" />
 ```
-# bold-node-executor
