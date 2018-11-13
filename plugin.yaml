@@ -2,7 +2,7 @@ name: Bolt node execution services
 rundeckPluginVersion: 1.2
 author: Luis Toledo
 date: 10/17/2017
-version: 1.0
+version: 1.0.1
 providers:
     - name: bolt-executor
       service: NodeExecutor

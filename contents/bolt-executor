@@ -5,6 +5,8 @@ import os
 import subprocess
 import sys
 
+os.putenv("HOME", "/var/lib/rundeck")
+os.putenv("PATH", "PATH=/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin")
 
 parser = argparse.ArgumentParser(description='Run Bolt command.')
 parser.add_argument('username', help='the username')
@@ -26,7 +28,7 @@ if "RD_CONFIG_PASSWORD_STORAGE_PATH" in os.environ:
 if protocol == "ssh":
     COMMAND.append("--tty")
 
-if use_ssl != true:
+if use_ssl != "true":
 	COMMAND.append("--no-ssl")
 
 if os.getenv("RD_JOB_LOGLEVEL") == "DEBUG":
