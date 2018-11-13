@@ -2,7 +2,7 @@ name: Bolt node execution services
 rundeckPluginVersion: 1.2
 author: Luis Toledo
 date: 10/17/2017
-version: 1.0
+version: 1.0.1
 providers:
     - name: bolt-executor
       service: NodeExecutor
@@ -41,6 +41,14 @@ providers:
             storage-path-root: "keys"
             storage-file-meta-filter: "Rundeck-data-type=password"
             instance-scope-node-attribute: "bolt-password-storage-path"
+        - type: Boolean
+          name: winrm_ssl
+          title: Use SSL for WinRM
+          description: Enable SSL requirement for WinRM
+          default: true
+          scope: Instance
+          renderingOptions:
+             instance-scope-node-attribute: "bolt-winrm-ssl"      
     - name: bolt-file-copier
       service: FileCopier
       title: 'Puppet Bolt / File Copier'
@@ -73,3 +81,11 @@ providers:
             storage-path-root: "keys"
             storage-file-meta-filter: "Rundeck-data-type=password"
             instance-scope-node-attribute: "bolt-password-storage-path"
+        - type: Boolean
+          name: winrm_ssl
+          title: Use SSL for WinRM
+          description: Enable SSL requirement for WinRM
+          default: true
+          scope: Instance
+          renderingOptions:
+             instance-scope-node-attribute: "bolt-winrm-ssl"           

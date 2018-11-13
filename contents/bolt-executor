@@ -5,6 +5,8 @@ import os
 import subprocess
 import sys
 
+os.putenv("HOME", "/var/lib/rundeck")
+os.putenv("PATH", "PATH=/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/opt/puppetlabs/bin")
 
 parser = argparse.ArgumentParser(description='Run Bolt command.')
 parser.add_argument('username', help='the username')
@@ -15,6 +17,7 @@ exec_command = os.getenv("RD_EXEC_COMMAND")
 
 protocol = os.getenv("RD_CONFIG_PROTOCOL") 
 host=protocol +"://"+args.hostname
+use_ssl = os.getenv("RD_CONFIG_WINRM_SSL")
 
 COMMAND = ["/usr/local/bin/bolt", "command", "run", exec_command,"-n", host,"-u",args.username]
 
@@ -24,6 +27,9 @@ if "RD_CONFIG_PASSWORD_STORAGE_PATH" in os.environ:
 
 if protocol == "ssh":
     COMMAND.append("--tty")
+
+if use_ssl != "true":
+	COMMAND.append("--no-ssl")
 
 if os.getenv("RD_JOB_LOGLEVEL") == "DEBUG":
     COMMAND.append("--debug")
